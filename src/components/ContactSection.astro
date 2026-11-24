@@ -1,0 +1,61 @@
+---
+import { profile } from '../data/profile';
+---
+
+<section id="contact" class="section" data-inview aria-labelledby="contact-title">
+  <div class="shell contact__layout">
+    <div class="contact__intro">
+      <p class="kicker" data-decode>06 · Contact</p>
+      <h2 id="contact-title" data-decode="once">Have an operation that needs better software?</h2>
+      <p data-decode="once">{profile.availability}</p>
+      <nav class="contact__links" aria-label="Profiles">
+        {profile.links.map((link) => (
+          <a class="text-link" href={link.href} target="_blank" rel="noopener noreferrer">
+            {link.label}<span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    <form
+      class="form"
+      name="portfolio-contact"
+      method="POST"
+      action="/message-received/"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      aria-describedby="contact-form-note"
+    >
+      <input type="hidden" name="form-name" value="portfolio-contact" />
+      <p class="form__trap" aria-hidden="true">
+        <label>Leave this field empty <input name="bot-field" type="text" tabindex="-1" autocomplete="off" /></label>
+      </p>
+
+      <div class="form__row">
+        <label class="field">
+          <span>Name</span>
+          <input name="name" type="text" autocomplete="name" required />
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input name="email" type="email" autocomplete="email" inputmode="email" required />
+        </label>
+      </div>
+
+      <label class="field">
+        <span>Organization <small>optional</small></span>
+        <input name="organization" type="text" autocomplete="organization" />
+      </label>
+
+      <label class="field">
+        <span>What are you working on?</span>
+        <textarea name="message" rows="6" maxlength="2400" required></textarea>
+      </label>
+
+      <div class="form__footer">
+        <p id="contact-form-note">Sent through Netlify Forms. Please don’t include sensitive or confidential information.</p>
+        <button class="button button--primary" type="submit">Send message</button>
+      </div>
+    </form>
+  </div>
+</section>

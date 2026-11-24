@@ -1,0 +1,19 @@
+---
+import { profile } from '../data/profile';
+import ForecastInstrument from './ForecastInstrument.astro';
+---
+
+<section id="top" class="hero" aria-labelledby="hero-title">
+  <div class="shell hero__layout">
+    <div class="hero__copy">
+      <h1 id="hero-title" data-decode="load">{profile.headline}</h1>
+      <p class="lead" data-decode="load">{profile.intro}</p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="#work">See the work</a>
+        <a class="button" href="#contact">Get in touch</a>
+      </div>
+    </div>
+
+    <ForecastInstrument />
+  </div>
+</section>

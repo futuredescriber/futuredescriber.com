@@ -1,0 +1,49 @@
+:root {
+  color-scheme: dark;
+
+  /* Surfaces: matte black, one raised step for panels */
+  --bg: #07080a;
+  --bg-raised: #0d0f12;
+  --bg-hover: #14171b;
+  --line: #1f2227;
+  --line-strong: #31353b;
+
+  /* Ink: warm off-white, two quieter steps */
+  --ink: #e9e6df;
+  --ink-2: #a9a9a1;
+  --ink-3: #85867f;
+
+  /* Phosphor plot colours, validated for colour-vision separation and contrast on this surface */
+  --series: #2cc4ee;
+  --series-rgb: 44, 196, 238;
+  --futures: #a86bf5;
+  --futures-rgb: 168, 107, 245;
+  --signal: #ff5a3c;
+  --signal-rgb: 255, 90, 60;
+  --spark: #e6fbff;
+
+  --font-display: 'Michroma', 'Eurostile', 'Bank Gothic', 'Exo 2', system-ui, sans-serif;
+  --font-sans: 'Exo 2', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.25rem;
+
+  --shell: 1180px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --section-gap: clamp(5rem, 10vw, 8.5rem);
+  --header-h: 64px;
+  --radius: 4px;
+  --focus: 0 0 0 2px var(--bg), 0 0 0 4px var(--series);
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --ink-2: #cfcfc8;
+    --ink-3: #b0b1aa;
+    --line: #3a3e45;
+    --line-strong: #4b5058;
+  }
+}

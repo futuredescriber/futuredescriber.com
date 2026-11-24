@@ -1,0 +1,31 @@
+---
+import { music } from '../data/music';
+
+---
+
+<div class="site-sound" data-music>
+  <a class="site-sound__thumb" href={music.videoUrl} target="_blank" rel="noopener noreferrer">
+    <img src={music.thumbnailUrl} alt="" width="32" height="32" loading="lazy" decoding="async" />
+    <span class="sr-only">{music.title} by {music.artist} on YouTube (opens in a new tab)</span>
+  </a>
+  <a class="site-sound__track" href={music.videoUrl} target="_blank" rel="noopener noreferrer">
+    {music.title} · {music.artist}<span class="sr-only"> (opens in a new tab)</span>
+  </a>
+  <button
+    class="site-sound__toggle"
+    type="button"
+    data-music-sound
+    aria-pressed="false"
+    aria-label={`Turn sound on: ${music.title} by ${music.artist}`}
+  >
+    <svg class="site-sound__icon site-sound__icon--off" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9v6h4l5 4V5L8 9H4z" />
+      <path d="M16 9l5 6M21 9l-5 6" />
+    </svg>
+    <svg class="site-sound__icon site-sound__icon--on" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9v6h4l5 4V5L8 9H4z" />
+      <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" />
+    </svg>
+  </button>
+  <audio data-music-audio preload="none"></audio>
+</div>

@@ -1,0 +1,48 @@
+---
+import { systems } from '../data/systems';
+import Schematic from './Schematic.astro';
+---
+
+<section id="work" class="section" data-inview aria-labelledby="work-title">
+  <div class="shell">
+    <header class="section-head">
+      <p class="kicker" data-decode>01 · Work</p>
+      <h2 id="work-title" data-decode="once">Four systems, built around real operational constraints.</h2>
+      <p data-decode="once">Four systems from real operations, generalized for public reading. Each started with how the work actually happens, not with a technology.</p>
+    </header>
+
+    <div class="work-list">
+      {systems.map((system) => (
+        <article id={`system-${system.id}`} class="system" data-system={system.id}>
+          <div class="system__copy">
+            <div class="system__head">
+              <span class="system__number" aria-hidden="true">{system.number}</span>
+              <div>
+                <p class="system__codename" data-decode>{system.codename.charAt(0) + system.codename.slice(1).toLowerCase()}</p>
+                <h3 data-decode="once">{system.title}</h3>
+                <p class="system__context" data-decode="once">{system.context}</p>
+              </div>
+            </div>
+
+            <dl class="brief">
+              <dt data-decode>Problem</dt>
+              <dd>{system.problem}</dd>
+              <dt data-decode>System</dt>
+              <dd>{system.system}</dd>
+              <dt data-decode>Result</dt>
+              <dd>{system.result}</dd>
+            </dl>
+
+            <p class="system__ownership">
+              <strong>My role</strong>{system.roles.join(' · ')}
+            </p>
+          </div>
+
+          <div class="system__visual">
+            <Schematic system={system} />
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

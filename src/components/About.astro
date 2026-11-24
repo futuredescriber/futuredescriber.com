@@ -1,0 +1,53 @@
+---
+import { profile } from '../data/profile';
+
+const facts = [
+  { label: 'Based in', value: 'Saskatoon, Saskatchewan' },
+  { label: 'Studied', value: 'Business Economics (Honours), University of Saskatchewan' },
+  { label: 'Field', value: 'Manufacturing and ecommerce' },
+  { label: 'Works in', value: 'Operations, data, and AI' },
+];
+---
+
+<section id="about" class="section" data-inview aria-labelledby="about-title">
+  <div class="shell about__layout">
+    <div class="about__body">
+      <p class="kicker" data-decode>04 · About</p>
+      <h2 id="about-title" data-decode="once">Close enough to the work to know where software breaks.</h2>
+      <div class="about__text">
+        <p>
+          I came to software from the floor, not from a computer science program. Before that I framed houses and
+          tested oil and gas wells.
+        </p>
+        <p>
+          For thirteen years I have worked inside a manufacturing and ecommerce business: scheduling production,
+          managing inventory, reading demand, fixing handoffs, and noticing where spreadsheets, systems, and judgment
+          stop lining up. Along the way I did the same for a multi-location field-services company. Now I build the
+          systems I used to wish for.
+        </p>
+      </div>
+
+      <dl class="facts" aria-label="Background">
+        {facts.map((fact) => (
+          <div>
+            <dt data-decode>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    {profile.showPortrait && (
+      <figure class="about__portrait">
+        <img
+          src={profile.portraitUrl}
+          alt={profile.portraitAlt}
+          width="400"
+          height="400"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+    )}
+  </div>
+</section>

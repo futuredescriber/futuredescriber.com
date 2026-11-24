@@ -1,0 +1,183 @@
+---
+import type { PortfolioSystem } from '../data/systems';
+
+interface Props {
+  system: PortfolioSystem;
+}
+
+const { system } = Astro.props;
+const grammar = system.chapterGrammar;
+
+const captions: Record<PortfolioSystem['chapterGrammar'], string> = {
+  route: 'Work flows through planning, execution, verification, and reporting; feedback returns to the start.',
+  orbit: 'Monitoring, review, action, and archive turn around one human decision.',
+  'approval-gate': 'Inputs are interpreted by rules and a model, then held for a person before anything is published.',
+  'priority-queue': 'Demand, supply, and context are ranked into a queue that reorders as the picture changes.',
+};
+
+const routeLine = 'M24 74H296';
+const routeReturn = 'M256 78C256 134 40 134 40 78';
+const orbitMid = 'M160 38A52 52 0 1 1 160 142A52 52 0 1 1 160 38';
+const orbitOuter = 'M160 16A74 74 0 1 0 160 164A74 74 0 1 0 160 16';
+const gateLine = 'M24 74H296';
+const streams = ['M24 40C96 40 100 90 150 90', 'M24 90H150', 'M24 140C96 140 100 90 150 90'];
+---
+
+<figure class:list={['schematic', `schematic--${grammar}`]} data-schematic={grammar}>
+  {grammar === 'route' && (
+    <svg viewBox="0 0 320 170" aria-hidden="true">
+      <path class="wire" d={routeLine} />
+      <path class="flow" d={routeLine} />
+      <path class="wire is-dashed" d={routeReturn} />
+      <path class="flow flow--return" d={routeReturn} />
+      <path class="rail" d="M24 154H296" />
+      {[40, 112, 184, 256].map((x) => (
+        <g>
+          <circle class="node-halo" cx={x} cy="74" r="13" />
+          <circle class="node-ring" cx={x} cy="74" r="9" />
+          <circle class="node" cx={x} cy="74" r="3.5" />
+        </g>
+      ))}
+      <text x="40" y="104" text-anchor="middle">Plan</text>
+      <text x="112" y="104" text-anchor="middle">Execute</text>
+      <text x="184" y="104" text-anchor="middle">Verify</text>
+      <text x="256" y="104" text-anchor="middle">Report</text>
+      <text class="is-muted" x="148" y="146" text-anchor="middle">feedback</text>
+      {['0s', '-2s', '-4s'].map((begin) => (
+        <g class="packet">
+          <circle class="halo" r="9" />
+          <circle class="dot" r="3" />
+          <animateMotion dur="6s" begin={begin} repeatCount="indefinite" path={routeLine} />
+        </g>
+      ))}
+      <g class="packet packet--return">
+        <circle class="halo" r="6" />
+        <circle class="dot" r="2.2" />
+        <animateMotion dur="6s" begin="-1s" repeatCount="indefinite" path={routeReturn} />
+      </g>
+    </svg>
+  )}
+
+  {grammar === 'orbit' && (
+    <svg viewBox="0 0 320 180" aria-hidden="true">
+      <circle class="ring ring--outer" cx="160" cy="90" r="74" />
+      <ellipse class="ring ring--tilt" cx="160" cy="90" rx="74" ry="24" />
+      <circle class="ring ring--mid" cx="160" cy="90" r="52" />
+      <circle class="ring ring--inner" cx="160" cy="90" r="28" />
+      {[
+        ['M160 90V38', 'M160 90H212', 'M160 90V142', 'M160 90H108'],
+      ][0].map((d) => (
+        <path class="flow flow--spoke" d={d} />
+      ))}
+      {[
+        [160, 38],
+        [212, 90],
+        [160, 142],
+        [108, 90],
+      ].map(([x, y]) => (
+        <g>
+          <circle class="node-halo" cx={x} cy={y} r="12" />
+          <circle class="node-ring" cx={x} cy={y} r="8" />
+          <circle class="node" cx={x} cy={y} r="3.2" />
+        </g>
+      ))}
+      <text x="160" y="24" text-anchor="middle">Monitor</text>
+      <text x="234" y="94">Review</text>
+      <text x="160" y="166" text-anchor="middle">Act</text>
+      <text x="86" y="94" text-anchor="end">Archive</text>
+      <circle class="core-halo" cx="160" cy="84" r="13" />
+      <circle class="core" cx="160" cy="84" r="4.5" />
+      <text class="is-muted" x="160" y="106" text-anchor="middle">Decision</text>
+      <g class="packet">
+        <circle class="halo" r="8" />
+        <circle class="dot" r="3" />
+        <animateMotion dur="16s" repeatCount="indefinite" path={orbitMid} />
+      </g>
+      <g class="packet packet--far">
+        <circle class="halo" r="6" />
+        <circle class="dot" r="2.2" />
+        <animateMotion dur="26s" repeatCount="indefinite" path={orbitOuter} />
+      </g>
+    </svg>
+  )}
+
+  {grammar === 'approval-gate' && (
+    <svg viewBox="0 0 320 170" aria-hidden="true">
+      <path class="wire" d={gateLine} />
+      <path class="flow" d={gateLine} />
+      {[40, 100, 280].map((x) => (
+        <g>
+          <circle class="node-halo" cx={x} cy="74" r="13" />
+          <circle class="node-ring" cx={x} cy="74" r="9" />
+          <circle class="node" cx={x} cy="74" r="3.5" />
+        </g>
+      ))}
+      <circle class="gate-halo" cx="160" cy="74" r="30" />
+      <path class="gate-ring" d="M160 40L194 74L160 108L126 74Z" />
+      <path class="gate" d="M160 52L182 74L160 96L138 74Z">
+        <animate
+          attributeName="fill-opacity"
+          values="0.5;0.5;0.1;0.1;0.5;0.5"
+          keyTimes="0;0.2;0.3;0.7;0.8;1"
+          dur="4s"
+          repeatCount="indefinite"
+        />
+      </path>
+      <text x="40" y="104" text-anchor="middle">Input</text>
+      <text x="100" y="104" text-anchor="middle">Interpret</text>
+      <text x="160" y="124" text-anchor="middle">Review</text>
+      <text x="280" y="104" text-anchor="middle">Publish</text>
+      <text class="is-muted" x="160" y="152" text-anchor="middle">a person approves</text>
+      {['0s', '-4s'].map((begin) => (
+        <g class="packet">
+          <circle class="halo" r="9" />
+          <circle class="dot" r="3" />
+          <animateMotion
+            dur="8s"
+            begin={begin}
+            repeatCount="indefinite"
+            path={gateLine}
+            calcMode="linear"
+            keyPoints="0;0.5;0.5;1"
+            keyTimes="0;0.4;0.6;1"
+          />
+        </g>
+      ))}
+    </svg>
+  )}
+
+  {grammar === 'priority-queue' && (
+    <svg viewBox="0 0 320 180" aria-hidden="true">
+      {streams.map((d) => (
+        <g>
+          <path class="wire" d={d} />
+          <path class="flow" d={d} />
+        </g>
+      ))}
+      <path class="wire" d="M168 90H190" />
+      <path class="flow" d="M168 90H190" />
+      <text x="24" y="32">Demand</text>
+      <text x="24" y="82">Supply</text>
+      <text x="24" y="132">Context</text>
+      <circle class="core-halo" cx="150" cy="90" r="16" />
+      <circle class="node-ring node-ring--core" cx="150" cy="90" r="11" />
+      <circle class="core" cx="150" cy="90" r="4.5" />
+      <text class="is-muted" x="150" y="118" text-anchor="middle">Rank</text>
+      <rect class="cursor" x="192" y="50" width="108" height="14" rx="3" />
+      <rect class="bar is-top" x="196" y="52" width="100" height="10" rx="2" />
+      <rect class="bar" x="196" y="76" width="74" height="10" rx="2" />
+      <rect class="bar" x="196" y="100" width="54" height="10" rx="2" />
+      <rect class="bar" x="196" y="124" width="38" height="10" rx="2" />
+      <text class="is-muted" x="196" y="156">priority queue</text>
+      {streams.map((d, index) => (
+        <g class="packet">
+          <circle class="halo" r="7" />
+          <circle class="dot" r="2.5" />
+          <animateMotion dur="4.2s" begin={`${-index * 1.4}s`} repeatCount="indefinite" path={d} />
+        </g>
+      ))}
+    </svg>
+  )}
+
+  <figcaption>{captions[grammar]}</figcaption>
+</figure>

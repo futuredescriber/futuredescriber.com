@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+---
+
+<BaseLayout
+  title="Page not found | Justin Thompson"
+  description="The requested page does not exist. Return to Justin Thompson's portfolio."
+  robots="noindex,follow"
+>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <SiteHeader />
+  <main id="main-content" class="shell utility">
+    <h1>Page not found.</h1>
+    <p>That address doesn’t exist or has moved.</p>
+    <a class="button button--primary" href="/">Back to the home page</a>
+  </main>
+</BaseLayout>

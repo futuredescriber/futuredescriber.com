@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Hero from '../components/Hero.astro';
+import WorkSection from '../components/WorkSection.astro';
+import Capabilities from '../components/Capabilities.astro';
+import Approach from '../components/Approach.astro';
+import About from '../components/About.astro';
+import Music from '../components/Music.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { music } from '../data/music';
+import { profile } from '../data/profile';
+
+const year = new Date().getFullYear();
+---
+
+<BaseLayout>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <SiteHeader />
+  <main id="main-content">
+    <Hero />
+    <WorkSection />
+    <Capabilities />
+    <Approach />
+    <About />
+    <Music />
+    <ContactSection />
+  </main>
+  <footer class="site-footer">
+    <div class="shell site-footer__inner">
+      <p data-decode>{profile.name} · {profile.callsign}</p>
+      <p class="site-footer__music">
+        Music: <a href={music.videoUrl} target="_blank" rel="noopener noreferrer">{music.title}</a> by
+        <a href={music.artistUrl} target="_blank" rel="noopener noreferrer">{music.artist}</a>
+      </p>
+      <p data-decode>Saskatoon, Saskatchewan · © {year}</p>
+    </div>
+  </footer>
+</BaseLayout>

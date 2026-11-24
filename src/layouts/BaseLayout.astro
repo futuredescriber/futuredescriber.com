@@ -1,0 +1,117 @@
+---
+import '@fontsource/michroma/400.css';
+import '@fontsource/exo-2/400.css';
+import '@fontsource/exo-2/500.css';
+import '@fontsource/exo-2/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+
+import { profile } from '../data/profile';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/site.css';
+import '../styles/instrument.css';
+import '../styles/schematics.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  robots?: string;
+}
+
+const {
+  title = 'Justin Thompson — Operational Systems, AI & Analytics',
+  description =
+    'AI-native operational systems, analytics, cloud infrastructure, and human-reviewed automation for manufacturing and ecommerce.',
+  robots = 'index,follow',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL('/social/portfolio-og.png', Astro.site);
+const socialAlt = 'Justin Thompson — operational systems for the next industrial age';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  alternateName: profile.callsign,
+  url: Astro.site?.toString(),
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Saskatoon',
+    addressRegion: 'Saskatchewan',
+    addressCountry: 'CA',
+  },
+  sameAs: [profile.linkedIn, profile.x],
+  knowsAbout: [
+    'Operational systems',
+    'Manufacturing analytics',
+    'Artificial intelligence',
+    'Google Cloud',
+    'Ecommerce operations',
+    'Data engineering',
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07080a" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="mask-icon" href="/mask-icon.svg" color="#3b9be4" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Future Describer" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:secure_url" content={socialImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialAlt} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content={socialAlt} />
+
+    <title>{title}</title>
+    <script is:inline>
+      document.documentElement.classList.replace('no-js', 'js');
+      try {
+        if (
+          !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+          !window.sessionStorage.getItem('fd-intro') &&
+          !window.location.hash
+        ) {
+          document.documentElement.classList.add('is-intro');
+        }
+      } catch (error) {
+        /* no storage, no intro gate */
+      }
+    </script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <canvas class="starfield" data-field aria-hidden="true"></canvas>
+    <slot />
+    <script>
+      import '../scripts/intro';
+      import '../scripts/navigation';
+      import '../scripts/surface';
+      import '../scripts/field';
+      import '../scripts/forecast';
+      import '../scripts/schematics';
+      import '../scripts/music';
+    </script>
+  </body>
+</html>

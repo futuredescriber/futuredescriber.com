@@ -1,0 +1,23 @@
+---
+import { capabilities } from '../data/capabilities';
+---
+
+<section id="capabilities" class="section" data-inview aria-labelledby="capabilities-title">
+  <div class="shell">
+    <header class="section-head">
+      <p class="kicker" data-decode>02 · Capabilities</p>
+      <h2 id="capabilities-title" data-decode="once">Six disciplines, one implementation loop.</h2>
+      <p data-decode="once">One loop, from how the work runs to a system that runs reliably. Each discipline shows up in the systems above.</p>
+    </header>
+
+    <div class="capability-grid">
+      {capabilities.map((capability) => (
+        <article id={`capability-${capability.id}`} class="capability">
+          <h3 data-decode="once">{capability.title}</h3>
+          <p>{capability.summary}</p>
+          <p class="capability__tech">{capability.technologies.join(', ')}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

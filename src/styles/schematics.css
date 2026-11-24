@@ -1,0 +1,382 @@
+.schematic {
+  padding: 0.75rem 0.75rem 0.6rem;
+  border-radius: 6px;
+  background:
+    radial-gradient(ellipse 60% 70% at 50% 45%, rgba(var(--futures-rgb), 0.07), transparent 70%),
+    var(--bg-raised);
+}
+
+.schematic svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.schematic text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  fill: var(--ink-2);
+}
+
+.schematic text.is-muted {
+  fill: var(--ink-3);
+}
+
+.schematic .wire {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.schematic .wire.is-dashed {
+  stroke-dasharray: 3 4;
+}
+
+/* Energy moving along wires */
+.schematic .flow {
+  fill: none;
+  stroke: var(--series);
+  stroke-opacity: 0.75;
+  stroke-width: 1.2;
+  stroke-dasharray: 5 11;
+  stroke-linecap: round;
+}
+
+.schematic .flow--return {
+  stroke: var(--ink-3);
+  stroke-opacity: 0.6;
+  stroke-dasharray: 3 11;
+}
+
+.schematic .flow--spoke {
+  stroke-opacity: 0.4;
+  stroke-dasharray: 2 9;
+}
+
+.schematic .rail {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 4;
+  stroke-dasharray: 1 7;
+}
+
+.schematic .node {
+  fill: var(--spark);
+}
+
+.schematic .node-ring {
+  fill: none;
+  stroke: var(--series);
+  stroke-opacity: 0.7;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.schematic .node-ring--core {
+  stroke: var(--futures);
+  stroke-dasharray: 3 5;
+}
+
+.schematic .node-halo {
+  fill: var(--series);
+  opacity: 0.1;
+}
+
+.schematic .halo {
+  fill: var(--series);
+  opacity: 0.28;
+}
+
+.schematic .dot {
+  fill: var(--spark);
+}
+
+.schematic .packet--return .halo,
+.schematic .packet--far .halo {
+  opacity: 0.18;
+}
+
+.schematic .core {
+  fill: #f1e6ff;
+}
+
+.schematic .core-halo {
+  fill: var(--futures);
+  opacity: 0.3;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.schematic .ring {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.schematic .ring--mid {
+  stroke: var(--series);
+  stroke-opacity: 0.7;
+  stroke-dasharray: 10 8;
+}
+
+.schematic .ring--outer {
+  stroke-dasharray: 2 12;
+}
+
+.schematic .ring--tilt {
+  stroke: var(--futures);
+  stroke-opacity: 0.55;
+  stroke-dasharray: 6 6;
+}
+
+.schematic .gate {
+  fill: var(--signal);
+  fill-opacity: 0.1;
+  stroke: var(--signal);
+  stroke-width: 1.4;
+}
+
+.schematic .gate-ring {
+  fill: none;
+  stroke: var(--signal);
+  stroke-opacity: 0.55;
+  stroke-width: 1;
+  stroke-dasharray: 5 7;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.schematic .gate-halo {
+  fill: var(--signal);
+  opacity: 0.1;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.schematic .bar {
+  fill: var(--series);
+  opacity: 0.9;
+}
+
+.schematic .bar.is-top {
+  fill: var(--signal);
+  opacity: 1;
+}
+
+.schematic .cursor {
+  fill: var(--spark);
+  opacity: 0.08;
+}
+
+.schematic figcaption {
+  margin-top: 0.5rem;
+  color: var(--ink-3);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+/* CSS motion. Path motion is SMIL inside the SVG and is paused with it. */
+
+.schematic .flow {
+  animation: flow 1.4s linear infinite;
+  animation-play-state: paused;
+}
+
+.schematic .flow--return {
+  animation-direction: reverse;
+  animation-duration: 2s;
+}
+
+.schematic .flow--spoke {
+  animation-duration: 2.4s;
+}
+
+.schematic .rail {
+  animation: rail 1.2s linear infinite;
+  animation-play-state: paused;
+}
+
+.schematic .node-ring {
+  animation: ring-turn 14s linear infinite;
+  animation-play-state: paused;
+}
+
+.schematic .core-halo {
+  animation: halo-pulse 2.6s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.schematic .ring--mid {
+  animation: ring-turn 48s linear infinite;
+  animation-play-state: paused;
+}
+
+.schematic .ring--outer {
+  animation: ring-turn 70s linear infinite reverse;
+  animation-play-state: paused;
+}
+
+.schematic .ring--tilt {
+  animation: ring-turn 22s linear infinite;
+  animation-play-state: paused;
+}
+
+.schematic .gate-ring {
+  animation: ring-turn 18s linear infinite;
+  animation-play-state: paused;
+}
+
+.schematic .gate-halo {
+  animation: gate-breathe 4s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.schematic--priority-queue .bar:nth-of-type(1) {
+  animation: swap-down 12s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.schematic--priority-queue .bar:nth-of-type(2) {
+  animation: swap-up 12s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.schematic--priority-queue .bar:nth-of-type(3) {
+  animation: swap-down 12s ease-in-out -6s infinite;
+  animation-play-state: paused;
+}
+
+.schematic--priority-queue .bar:nth-of-type(4) {
+  animation: swap-up 12s ease-in-out -6s infinite;
+  animation-play-state: paused;
+}
+
+.schematic .cursor {
+  animation: cursor-scan 5.6s steps(4, jump-none) infinite;
+  animation-play-state: paused;
+}
+
+.schematic.is-visible .flow,
+.schematic.is-visible .rail,
+.schematic.is-visible .node-ring,
+.schematic.is-visible .core-halo,
+.schematic.is-visible .ring--mid,
+.schematic.is-visible .ring--outer,
+.schematic.is-visible .ring--tilt,
+.schematic.is-visible .gate-ring,
+.schematic.is-visible .gate-halo,
+.schematic.is-visible .bar,
+.schematic.is-visible .cursor {
+  animation-play-state: running;
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+
+@keyframes rail {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+
+@keyframes halo-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.7);
+    opacity: 0.06;
+  }
+}
+
+@keyframes ring-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gate-breathe {
+  0%,
+  30%,
+  70%,
+  100% {
+    transform: scale(1);
+    opacity: 0.1;
+  }
+
+  12%,
+  88% {
+    transform: scale(1.3);
+    opacity: 0.28;
+  }
+}
+
+@keyframes swap-down {
+  0%,
+  22% {
+    transform: translateY(0);
+  }
+
+  32%,
+  62% {
+    transform: translateY(24px);
+  }
+
+  72%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes swap-up {
+  0%,
+  22% {
+    transform: translateY(0);
+  }
+
+  32%,
+  62% {
+    transform: translateY(-24px);
+  }
+
+  72%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes cursor-scan {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(72px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .schematic .flow,
+  .schematic .rail,
+  .schematic .node-ring,
+  .schematic .core-halo,
+  .schematic .ring,
+  .schematic .gate-ring,
+  .schematic .gate-halo,
+  .schematic .bar,
+  .schematic .cursor,
+  .schematic .packet {
+    animation: none !important;
+  }
+}

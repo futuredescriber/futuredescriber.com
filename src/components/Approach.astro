@@ -1,0 +1,41 @@
+---
+import { profile } from '../data/profile';
+
+const steps = [
+  {
+    title: 'Observe the work',
+    copy: 'Sit with the real workflow: the handoffs, the failure modes, the incentives.',
+  },
+  {
+    title: 'Define the control model',
+    copy: 'Make states, ownership, data, and exceptions explicit before anything is built.',
+  },
+  {
+    title: 'Build the shortest useful loop',
+    copy: 'Ship the narrowest thing that works, instrument it, and watch real use.',
+  },
+  {
+    title: 'Harden and extend',
+    copy: 'Automate what has proven itself, make it reliable, and move heavy work to the right infrastructure.',
+  },
+];
+---
+
+<section id="approach" class="section" data-inview aria-labelledby="approach-title">
+  <div class="shell">
+    <header class="section-head">
+      <p class="kicker" data-decode>03 · Approach</p>
+      <h2 id="approach-title" data-decode="once">The build starts before the code.</h2>
+      <p data-decode="once">{profile.ownershipLine}</p>
+    </header>
+
+    <ol class="steps">
+      {steps.map((step) => (
+        <li>
+          <h3 data-decode="once">{step.title}</h3>
+          <p>{step.copy}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

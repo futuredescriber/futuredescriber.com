@@ -1,0 +1,132 @@
+---
+import {
+  CAPACITY,
+  DEFAULT_SEED,
+  HISTORY,
+  HORIZON,
+  X_TICKS,
+  Y_TICKS,
+  breachChance,
+  createState,
+  geometry,
+  intervalPercent,
+  memberValues,
+} from '../lib/forecast-model';
+
+/*
+ * The static SVG below is the no-JavaScript fallback. It is rendered at build
+ * time from the same seeded simulation the browser animates, so the first
+ * frame of the canvas matches it.
+ */
+const state = createState(DEFAULT_SEED);
+const width = 560;
+const height = 385;
+const g = geometry(width, height);
+const fmt = (value: number): string => value.toFixed(1);
+
+const lastObserved = state.observed[HISTORY - 1] as number;
+const observedPath = state.observed
+  .map((value, index) => `${index === 0 ? 'M' : 'L'}${fmt(g.x(index - (HISTORY - 1)))} ${fmt(g.y(value))}`)
+  .join(' ');
+const meanPath = [
+  `M${fmt(g.x(0))} ${fmt(g.y(lastObserved))}`,
+  ...state.forecast.map((point, index) => `L${fmt(g.x(index + 1))} ${fmt(g.y(point.mean))}`),
+].join(' ');
+const paths = state.members.map((member) => memberValues(member, state.forecast));
+const futurePaths = paths
+  .filter((_, index) => index % 4 === 0)
+  .map((values) =>
+    [`M${fmt(g.x(0))} ${fmt(g.y(lastObserved))}`, ...values.map((value, h) => `L${fmt(g.x(h + 1))} ${fmt(g.y(value))}`)].join(' '),
+  );
+const breaches = state.forecast
+  .map((point, index) => ({ point, index: index + 1 }))
+  .filter(({ point }) => point.mean > CAPACITY);
+const capacityY = g.y(CAPACITY);
+const chance = breachChance(paths);
+const band = intervalPercent(state.forecast);
+---
+
+<figure class="instrument" data-forecast aria-describedby="forecast-caption">
+  <div class="instrument__head">
+    <p class="instrument__title">Demand forecast</p>
+    <p class="instrument__tag">simulated data</p>
+  </div>
+
+  <div class="instrument__plot">
+    <svg
+      class="instrument__fallback"
+      viewBox={`0 0 ${width} ${height}`}
+      role="img"
+      aria-label="A simulated demand series with a 28-day forecast, a spread of possible futures, and a fixed capacity line."
+    >
+      <defs>
+        <clipPath id="forecast-below"><rect x={g.plotLeft} y={fmt(capacityY)} width={g.plotRight - g.plotLeft} height={fmt(g.plotBottom - capacityY)} /></clipPath>
+        <clipPath id="forecast-above"><rect x={g.plotLeft} y={g.plotTop - 10} width={g.plotRight - g.plotLeft} height={fmt(capacityY - g.plotTop + 10)} /></clipPath>
+      </defs>
+      <g stroke="var(--line)" stroke-width="1">
+        {Y_TICKS.map((tick) => (
+          <line x1={g.plotLeft} x2={g.plotRight} y1={fmt(g.y(tick))} y2={fmt(g.y(tick))} />
+        ))}
+      </g>
+      {Y_TICKS.map((tick) => (
+        <text x={g.plotLeft - 8} y={fmt(g.y(tick) + 4)} text-anchor="end">{tick}</text>
+      ))}
+      <text x={g.plotLeft} y={g.plotTop - 5}>units / day</text>
+      {X_TICKS.map((tick) => (
+        <text x={fmt(g.x(tick.index))} y={g.plotBottom + 17} text-anchor="middle" fill={tick.index === 0 ? 'var(--ink-2)' : undefined}>
+          {tick.label}
+        </text>
+      ))}
+      <g clip-path="url(#forecast-below)" fill="none" stroke="var(--futures)" stroke-opacity="0.2" stroke-width="1">
+        {futurePaths.map((d) => <path d={d} />)}
+      </g>
+      <g clip-path="url(#forecast-above)" fill="none" stroke="var(--signal)" stroke-opacity="0.24" stroke-width="1">
+        {futurePaths.map((d) => <path d={d} />)}
+      </g>
+      <line x1={g.plotLeft} x2={g.plotRight} y1={fmt(capacityY)} y2={fmt(capacityY)} stroke="var(--signal)" stroke-width="1.25" stroke-dasharray="7 7"></line>
+      <text x={g.plotLeft + 4} y={fmt(capacityY - 4)}>capacity</text>
+      <line x1={fmt(g.x(0))} x2={fmt(g.x(0))} y1={g.plotTop - 10} y2={g.plotBottom} stroke="var(--line-strong)" stroke-width="1"></line>
+      <path d={observedPath} fill="none" stroke="var(--series)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+      <path d={meanPath} fill="none" stroke="var(--ink)" stroke-opacity="0.85" stroke-width="1.5" stroke-dasharray="5 5" stroke-linejoin="round"></path>
+      {breaches.map(({ point, index }) => (
+        <g>
+          <circle cx={fmt(g.x(index))} cy={fmt(g.y(point.mean))} r="5.5" fill="var(--bg)" />
+          <circle cx={fmt(g.x(index))} cy={fmt(g.y(point.mean))} r="3.5" fill="var(--signal)" />
+        </g>
+      ))}
+      <circle cx={fmt(g.x(0))} cy={fmt(g.y(lastObserved))} r="14" fill="none" stroke="var(--line-strong)" stroke-width="2"></circle>
+      <circle cx={fmt(g.x(0))} cy={fmt(g.y(lastObserved))} r="20" fill="none" stroke="var(--series)" stroke-opacity="0.6" stroke-dasharray="3 6"></circle>
+      <circle cx={fmt(g.x(0))} cy={fmt(g.y(lastObserved))} r="6" fill="var(--bg)"></circle>
+      <circle cx={fmt(g.x(0))} cy={fmt(g.y(lastObserved))} r="3.6" fill="var(--spark)"></circle>
+    </svg>
+    <canvas aria-hidden="true"></canvas>
+    <div class="instrument__tooltip" data-tooltip hidden></div>
+  </div>
+
+  <ul class="legend" aria-label="Chart legend">
+    <li><i aria-hidden="true"></i>Observed demand</li>
+    <li><i class="is-mean" aria-hidden="true"></i>Forecast mean</li>
+    <li><i class="is-fog" aria-hidden="true"></i>Possible futures</li>
+    <li><i class="is-capacity" aria-hidden="true"></i>Capacity</li>
+  </ul>
+
+  <dl class="readouts">
+    <div>
+      <dt>Forecast horizon</dt>
+      <dd data-readout="horizon">{HORIZON} days</dd>
+    </div>
+    <div>
+      <dt>Breach within 7 days</dt>
+      <dd data-readout="risk">{chance}%</dd>
+    </div>
+    <div>
+      <dt>80% interval</dt>
+      <dd data-readout="band">±{band}%</dd>
+    </div>
+  </dl>
+
+  <figcaption id="forecast-caption">
+    Simulated demand with a 28-day probabilistic forecast: 96 possible futures against a fixed capacity line. The same
+    kind of model sits behind systems 02 and 04.
+  </figcaption>
+</figure>

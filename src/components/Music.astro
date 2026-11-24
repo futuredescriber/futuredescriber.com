@@ -1,0 +1,30 @@
+---
+import { creative } from '../data/creative';
+---
+
+<section id="music" class="section" data-inview aria-labelledby="music-title">
+  <div class="shell music">
+    <figure class="music__art">
+      <img
+        src={creative.artworkUrl}
+        alt={creative.artworkAlt}
+        width="1179"
+        height="1126"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+    <div class="music__body">
+      <p class="kicker kicker--signal" data-decode>05 · Outside the work</p>
+      <h2 id="music-title" data-decode="once">{creative.name}</h2>
+      <p>{creative.description}</p>
+      <ul class="music__awards" aria-label="Recognition">
+        {creative.awards.map((award) => <li>{award}</li>)}
+      </ul>
+      <p class="music__origin">{creative.originLine}</p>
+      <a class="text-link" href={creative.url} target="_blank" rel="noopener noreferrer">
+        thebasementpaintings.com<span class="sr-only"> (opens in a new tab)</span>
+      </a>
+    </div>
+  </div>
+</section>

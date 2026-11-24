@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+---
+
+<BaseLayout
+  title="Message received | Justin Thompson"
+  description="Your message has been received."
+  robots="noindex,follow"
+>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <SiteHeader />
+  <main id="main-content" class="shell utility">
+    <h1>Message received.</h1>
+    <p>Thanks for reaching out. I’ll reply to the email address you provided.</p>
+    <a class="button button--primary" href="/">Back to the home page</a>
+  </main>
+</BaseLayout>
